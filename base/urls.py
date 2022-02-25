@@ -1,4 +1,6 @@
 
+from re import U
+from urllib.parse import urljoin
 from django.urls import path
 from . import views
 # from rest_framework_simplejwt.views import (
@@ -13,6 +15,10 @@ urlpatterns = [
     path('users/register/', views.registerUser, name = 'register'),
     path('users/profile/', views.getUserProfile , name='users-profile'),
     path('users/', views.getUsers , name='users'),
-    path('products/', views.getProducts , name='product'),
+    path('products/', views.getProducts , name='products'),
+    path('products/<pk>/', views.getProduct, name='product'),  #<str:pk>
 ]
+
  
+
+

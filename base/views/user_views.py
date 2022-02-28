@@ -5,13 +5,15 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 #from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
-from base.models import Product
+
 from base.serializers import ProductSerializer, UserSerializer, UserSerializerWithToken
 from rest_framework import status
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.hashers import make_password
+
+
 
 # Create your views here.
 
@@ -80,18 +82,3 @@ def getUsers(request):
 
 
 
-
-@api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-def getProducts(request):
-    products = Product.objects.all()
-    serializer = ProductSerializer(products, many=True)
-    return Response(serializer.data)
-
-
-## Get Product View
-@api_view(['GET'])
-def getProduct(request, pk):
-    product = Product.objects.get(id=pk)     #(_id=pk)
-    serializer = ProductSerializer(product, many=False)
-    return Response(serializer.data)

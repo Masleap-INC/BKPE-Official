@@ -10,8 +10,6 @@ from base.serializers import ProductSerializer
 from rest_framework import status
 
 
-from django.contrib.auth.hashers import make_password
-
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])

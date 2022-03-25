@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Product, Order, OrderItem, ShippingAddress, Review
+from .models import Product, Order, OrderItem, ShippingAddress, Review, Category 
+
 
 
 
@@ -44,6 +45,35 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
 
+ 
+# Category Serializer
+class CategorySerializer(serializers.ModelSerializer):
+    #products = serializers.SerializerMethodField(read_only=True)  #ProductSerializer(many=True)
+    
+       # class Meta:
+    #     model = Category
+    #     # fields = '__all__'
+    #     fields = (
+    #         "id",
+    #         "name",
+    #         "get_absolute_url",
+    #         "products",
+    #     )
+
+
+    class Meta:
+        model = Category
+        fields = '__all__'
+''' 
+    def get_productList(self, obj):
+        product_list = obj.product_set.all()
+        serializer = ProductSerializer(product_list, many=True)
+        return serializer.data
+
+'''
+
+
+ 
 
 
 

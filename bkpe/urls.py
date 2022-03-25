@@ -32,7 +32,7 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 
-# env\\Scripts\activate
+# env\Scripts\activate
 # py manage.py runserver
 
 # py manage.py makemigrations

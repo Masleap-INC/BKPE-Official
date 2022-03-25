@@ -108,9 +108,9 @@ def getOrderById(request, pk):
 
 
 
-'''
+## gets User Orders
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+#@permission_classes([IsAuthenticated])
 def getMyOrders(request):
     user = request.user
     orders = user.order_set.all()
@@ -118,6 +118,7 @@ def getMyOrders(request):
     return Response(serializer.data)
 
 
+## get all Orders for Admin
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getOrders(request):
@@ -126,8 +127,27 @@ def getOrders(request):
     return Response(serializer.data)
 
 
+
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def updateOrderToDelivered(request, pk):
+    order = Order.objects.get(id=pk)    #(_id=pk)
+
+    order.isDelivered = True
+    order.deliveredAt = datetime.now()
+    order.save()
+
+    return Response('Order was delivered')
+
+
+
+
+
+'''
+
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])   ### added avobe
+@permission_classes([IsAuthenticated])   ### added above
 def getOrderById(request, pk):
 
     user = request.user
@@ -157,7 +177,7 @@ def updateOrderToPaid(request, pk):
 
 
 @api_view(['PUT'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsAdminUser])           ### added above
 def updateOrderToDelivered(request, pk):
     order = Order.objects.get(_id=pk)
 

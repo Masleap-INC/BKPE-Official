@@ -6,12 +6,30 @@ from django.contrib.auth.models import User
 # Create your models here...
 
 
+## Category models
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+    # slug = models.SlugField()
+
+    # class Meta:
+    #     ordering = ('name',)
+    
+    # def __str__(self):
+    #     return self.name
+    
+    # def get_absolute_url(self):
+    #     return f'/{self.slug}/'
+
+
 class Product(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200, null=True, blank=True)
+    category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, default='Default-Category')
     image = models.ImageField(null=True, blank=True, default='/placeholder.png')
     brand = models.CharField(max_length=200, null=True, blank=True)
-    category = models.CharField(max_length=200, null=True, blank=True)
+
+    #category = models.CharField(max_length=200, null=True, blank=True)   ##this category is the old one
+    
     description = models.TextField(null=True, blank=True)
     rating = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     numReviews = models.IntegerField(null=True, blank=True, default=0)
@@ -24,6 +42,12 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
+
+
+    
 
 
 

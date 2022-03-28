@@ -30,7 +30,7 @@ from datetime import datetime
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# need to add later  @permission_classes([IsAuthenticated])
 def addOrderItems(request):
     user = request.user
     data = request.data
@@ -89,7 +89,7 @@ def addOrderItems(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# need to add later  @permission_classes([IsAuthenticated])
 def getOrderById(request, pk):
 
     user = request.user
@@ -120,7 +120,7 @@ def getMyOrders(request):
 
 ## get all Orders for Admin
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+# need to add later  @permission_classes([IsAdminUser])
 def getOrders(request):
     orders = Order.objects.all()
     serializer = OrderSerializer(orders, many=True)
@@ -130,7 +130,7 @@ def getOrders(request):
 
 
 @api_view(['PUT'])
-@permission_classes([IsAdminUser])
+# need to add later  @permission_classes([IsAdminUser])
 def updateOrderToDelivered(request, pk):
     order = Order.objects.get(id=pk)    #(_id=pk)
 
@@ -186,4 +186,5 @@ def updateOrderToDelivered(request, pk):
     order.save()
 
     return Response('Order was delivered')
+    
 '''

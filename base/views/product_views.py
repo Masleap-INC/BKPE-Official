@@ -1,5 +1,7 @@
+from itertools import product
 from pydoc import describe
-from unicodedata import category
+#from socket import RDS_RDMA_SILENT
+from unicodedata import category, name
 from urllib import request
 from django.shortcuts import render
 from rest_framework.views import APIView
@@ -9,10 +11,13 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 #from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from base.models import Product,Category
+from base.models import Product,Category, Review
 from base.serializers import ProductSerializer,CategorySerializer
 from rest_framework import status
 from django.http import Http404
+
+from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 
 
 
@@ -35,7 +40,7 @@ def getProduct(request, pk):
 
 
 @api_view(['POST'])
-@permission_classes([IsAdminUser])
+# need to add later  @permission_classes([IsAdminUser])
 def createProduct(request):
     user = request.user
 
@@ -53,7 +58,7 @@ def createProduct(request):
     return Response(serializer.data)
 
 @api_view(['PUT'])
-@permission_classes([IsAdminUser])
+# need to add later  @permission_classes([IsAdminUser])
 def updateProduct(request, pk):
     data = request.data
     product = Product.objects.get(id=pk)
@@ -73,7 +78,7 @@ def updateProduct(request, pk):
 
 ## Delete Product View
 @api_view(['DELETE'])
-@permission_classes([IsAdminUser])
+# need to add later  @permission_classes([IsAdminUser])
 def deleteProduct(request, pk):
     product = Product.objects.get(id=pk)     #(_id=pk)
     product.delete()
@@ -95,8 +100,38 @@ def uploadImage(request):
     return Response('Image was uploaded')
 
 
-'''  
-# Category View
+
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def getCategories(request):   #pk
+    categories = Category.objects.all()
+    serializer = CategorySerializer(categories, many=True)
+    return Response(serializer.data)
+
+
+# ## Test view for Category based product
+# @api_view(['GET'])
+# def getCategorybasedProducts(request,pk):
+#     products = Product.objects.filter(rating__gte=4).order_by('-rating')[0:5]
+#     serializer = ProductSerializer(products, many=True)
+#     return Response(serializer.data)
+
+
+# # Starting View of Category inspired by Amazone YouTube Tutorial
+
+# class ProductListAPIVIew(ListAPIView):
+#     serializer_class = ProductSerializer
+#     queryset = Product.objects.all()
+
+#     filter_fields = (
+#         'category__id',
+#     )
+#     search_fields = (
+#         'title',
+#     )
+
+
 class CategoryDetail(APIView):
     def get_object(self, category_slug):
         try:
@@ -108,36 +143,86 @@ class CategoryDetail(APIView):
         category = self.get_object(category_slug)
         serializer = CategorySerializer(category)
         return Response(serializer.data)
-'''
 
 
-@api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-def getCategories(request):   #pk
-    categories = Category.objects.all()
-    serializer = CategorySerializer(categories, many=True)
-    return Response(serializer.data)
 
 
-''' 
-@api_view(['GET'])     ##To be deleted later
+
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def getOrderById(request, pk):
-
+def createProductReview(request, pk):
     user = request.user
+    product = Product.objects.get(id=pk)  #_id
+    data = request.data
 
-    try:
-        order = Order.objects.get(id=pk)
-        if user.is_staff or order.user == user:
-            serializer = OrderSerializer(order, many=False)
-            return Response(serializer.data)
-        else:
-            Response({'detail': 'Not authorized to view this order'},
-                     status=status.HTTP_400_BAD_REQUEST)
-    except:
-        return Response({'detail': 'Order does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+    # 1 - Review already exists
+    alreadyExists = product.review_set.filter(user=user).exists()
+    if alreadyExists:
+        content = {'detail': 'Product already reviewed'}
+        return Response(content , status=status.HTTP_400_BAD_REQUEST) 
 
-'''
+    # 2 - No Rating or 0
+    elif data['rating'] == 0:
+        content = {'detail': 'Please select a rating'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+    # 3 - Create review
+    else:
+        review = Review.objects.create(
+            user=user,
+            product=product,
+            name=user.first_name,
+            rating=data['rating'],
+            comment=data['comment'],
+        )
+
+        reviews = product.review_set.all()
+        product.numReviews = len(reviews)
+
+        total = 0
+        for i in reviews:
+            total += i.rating
+
+        product.rating = total / len(reviews)
+        product.save()
+
+        return Response('Review Added')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ''' 
+# @api_view(['GET'])     ##To be deleted later
+# @permission_classes([IsAuthenticated])
+# def getOrderById(request, pk):
+
+#     user = request.user
+
+#     try:
+#         order = Order.objects.get(id=pk)
+#         if user.is_staff or order.user == user:
+#             serializer = OrderSerializer(order, many=False)
+#             return Response(serializer.data)
+#         else:
+#             Response({'detail': 'Not authorized to view this order'},
+#                      status=status.HTTP_400_BAD_REQUEST)
+#     except:
+#         return Response({'detail': 'Order does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+
+# '''
 # @api_view(['GET'])     ##To be deleted later
 # @permission_classes([IsAuthenticated])
 # def getCatProd(request, pk):

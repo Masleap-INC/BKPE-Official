@@ -65,7 +65,7 @@ def registerUser(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# need to add later  @permission_classes([IsAuthenticated])
 def getUserProfile(request):
     user = request.user
     serializer = UserSerializer(user, many=False)
@@ -74,7 +74,7 @@ def getUserProfile(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+# need to add later  @permission_classes([IsAdminUser])
 def getUsers(request):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
@@ -83,7 +83,7 @@ def getUsers(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+# need to add later  @permission_classes([IsAdminUser])
 def getUserById(request, pk):
     user = User.objects.get(id=pk)
     serializer = UserSerializer(user, many=False)
@@ -92,7 +92,7 @@ def getUserById(request, pk):
 
 
 @api_view(['PUT'])
-@permission_classes([IsAuthenticated])
+# need to add later  @permission_classes([IsAuthenticated])
 def updateUser(request, pk):
     user = User.objects.get(id=pk)
 
@@ -115,7 +115,7 @@ def updateUser(request, pk):
 
 
 @api_view(['DELETE'])
-@permission_classes([IsAdminUser])
+# need to add later  @permission_classes([IsAdminUser])
 def deleteUser(request, pk):
     userForDeletion = User.objects.get(id=pk)
     userForDeletion.delete()

@@ -159,7 +159,13 @@ def createProductReview(request, pk):
     alreadyExists = product.review_set.filter(user=user).exists()
     if alreadyExists:
         content = {'detail': 'Product already reviewed'}
-        return Response(content , status=status.HTTP_400_BAD_REQUEST) 
+
+        reviews = product.review_set.all()
+        product.numReviews = len(reviews)
+        product.save()
+
+        # return Response({numReviews})
+        #return Response(content , status=status.HTTP_400_BAD_REQUEST) 
 
     # 2 - No Rating or 0
     elif data['rating'] == 0:
@@ -171,11 +177,11 @@ def createProductReview(request, pk):
         review = Review.objects.create(
             user=user,
             product=product,
-            name=user.first_name,
+            name=user.first_name,     #user.first_name, username
             rating=data['rating'],
             comment=data['comment'],
         )
-
+        #return Response('Review Added')
         reviews = product.review_set.all()
         product.numReviews = len(reviews)
 
@@ -189,6 +195,22 @@ def createProductReview(request, pk):
         return Response('Review Added')
 
 
+        
+
+''' 
+        reviews = product.review_set.all()
+        product.numReviews = len(reviews)
+
+        total = 0
+        for i in reviews:
+            total += i.rating
+
+        product.rating = total / len(reviews)
+        product.save()
+
+        return Response('Review Added')
+
+'''
 
 
 
@@ -252,3 +274,4 @@ def productList(request, pk):
     serializer = ProductSerializer(queryset, many=True)
     return Response(serializer.data)
 '''
+

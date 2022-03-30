@@ -38,14 +38,24 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'rest_framework',
     'base.apps.BaseConfig',
+
+    # 3 rd party
+    
+    'rest_framework',
+    'django_extensions',
+    'django_filters',
+    'corsheaders'
+
 ]
 
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # "django_filters.rest_framework.DjangoFilterBackend",
+        # "rest_framework.filters.SearchFilter",
+        # "rest_framework.filters.OrderingFilter",
     )
 }
 
@@ -86,6 +96,7 @@ SIMPLE_JWT = {
 
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware", #corsheaders
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -128,12 +139,28 @@ DATABASES = {
 }
 '''
 
+
+# mongodb+srv://bkpe:<password>@cluster0.nfdb8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+''' 
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'bkpeDB',
     }
 }
+'''
+
+DATABASES = {
+        'default': {
+            'ENGINE': 'djongo',
+            'NAME': 'bkpeDB',
+            'ENFORCE_SCHEMA': False,
+            'CLIENT': {
+                'host': 'mongodb+srv://bkpe:bkpe3311@cluster0.nfdb8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+            }
+        }
+}
+
 
 
 # Password validation
@@ -183,3 +210,5 @@ MEDIA_ROOT = 'static/images'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOW_ALL_ORIGINS = True

@@ -29,6 +29,7 @@ def getProducts(request):
     return Response(serializer.data)
 
 
+
 ## Get Product View
 @api_view(['GET'])
 def getProduct(request, pk):
@@ -160,12 +161,12 @@ def createProductReview(request, pk):
     if alreadyExists:
         content = {'detail': 'Product already reviewed'}
 
-        reviews = product.review_set.all()
-        product.numReviews = len(reviews)
-        product.save()
+        #reviews = product.review_set.all()
+        #numReviews1 = len(reviews)
+        #product.save()
+        #return Response({numReviews1})
 
-        # return Response({numReviews})
-        #return Response(content , status=status.HTTP_400_BAD_REQUEST) 
+        return Response(content , status=status.HTTP_400_BAD_REQUEST) 
 
     # 2 - No Rating or 0
     elif data['rating'] == 0:
@@ -177,7 +178,7 @@ def createProductReview(request, pk):
         review = Review.objects.create(
             user=user,
             product=product,
-            name=user.first_name,     #user.first_name, username
+            name=user.first_name,     #user.first_name
             rating=data['rating'],
             comment=data['comment'],
         )

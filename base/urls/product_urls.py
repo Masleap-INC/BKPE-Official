@@ -8,7 +8,7 @@ from base.views import product_views as views
 
 urlpatterns = [
 
-    path('', views.getProducts , name='products'),
+    path('', views.getProducts, name='products'),
     path('categories/', views.getCategories, name='get-categories'),
 
     path('create/', views.createProduct, name='product-create'),

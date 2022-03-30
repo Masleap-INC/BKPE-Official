@@ -1,9 +1,7 @@
 
 # BKPE-Official
 
-
 A Multi Vendor E-com shop build with Django REST Framework(DRF).
-
 
 ####  Dependencies
 - Python 3.6+
@@ -17,7 +15,6 @@ A Multi Vendor E-com shop build with Django REST Framework(DRF).
 git clone git@github.com:Masleap-INC/BKPE-Official.git
 ```
 
-
 # Create virtualenv and install all requirements in backend directory:
 ```commandline
 cd BKPE-Official
@@ -25,7 +22,6 @@ py -m venv env
 env\Scripts\activate
 pip install -r requirements.txt
 ```
-
 
 # Set up database connection in bkpe/settings.py in DATABASES section:
 
@@ -61,7 +57,6 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-
 # Creating an admin user:
 ```python
 python manage.py createsuperuser
@@ -71,3 +66,4 @@ python manage.py createsuperuser
 ```python
 python manage.py runserver
 ```
+

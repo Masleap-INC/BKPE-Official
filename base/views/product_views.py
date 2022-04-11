@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
-#from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from base.models import Product,Category, Review
 from base.serializers import ProductSerializer,CategorySerializer
@@ -21,12 +21,121 @@ from rest_framework.generics import ListAPIView
 
 
 
+## Custom Permissions only for superuser
+class IsSuperUser(IsAdminUser):
+    def has_permission(self, request, view):
+        return request.user and request.user.is_superuser
+
+
+
+
+
+
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def getProducts(request):
-    products = Product.objects.all()
+
+    Total_Products = request.query_params.get('products_per_page')
+    if Total_Products == '1':
+        NoOfProducts = 1
+    elif Total_Products == '2':
+        NoOfProducts = 2
+    elif Total_Products == '3':
+        NoOfProducts = 3
+    elif Total_Products == '4':
+        NoOfProducts = 4
+    else:
+        NoOfProducts = 6
+
+
+
+    query = request.query_params.get('keyword')
+    print('query:', query)
+    if query == None:
+        query = ''
+    products = Product.objects.filter(name__icontains=query)
+
+    # Pagination starts here
+
+    #NoOfProducts = 4
+    page = request.query_params.get('page')
+    paginator = Paginator(products, NoOfProducts) #(products, 5)
+
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
+
+    if page == None:
+        page = 1
+
+    page = int(page)
+    print('Page:', page)
+
+    # Pagination ends here
+
+    # products = Product.objects.all()
+    serializer = ProductSerializer(products, many=True)
+    # return Response(serializer.data)
+    return Response({'products': serializer.data, 'page': page, 'pages': paginator.num_pages})
+
+
+
+
+
+
+
+'''    
+##### This one is the old getProducts view which works perfectly.
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def getProducts(request):
+    query = request.query_params.get('keyword')
+    print('query:', query)
+    if query == None:
+        query = ''
+    products = Product.objects.filter(name__icontains=query)
+
+    # Pagination starts here
+
+    NoOfProducts = 4
+    page = request.query_params.get('page')
+    paginator = Paginator(products, NoOfProducts) #(products, 5)
+
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
+
+    if page == None:
+        page = 1
+
+    page = int(page)
+    print('Page:', page)
+
+    # Pagination ends here
+
+    # products = Product.objects.all()
+    serializer = ProductSerializer(products, many=True)
+    # return Response(serializer.data)
+    return Response({'products': serializer.data, 'page': page, 'pages': paginator.num_pages})
+
+'''
+
+@api_view(['GET'])
+def getTopProducts(request):
+    products = Product.objects.filter(rating__gte=4).order_by('-rating')[0:5]
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
+
+
+
+
 
 
 
@@ -102,9 +211,36 @@ def uploadImage(request):
 
 
 
+## Create Category View    #createCategory/ added on 06.04.2022
+@api_view(['POST'])
+def createCategory(request):
+    data = request.data
+    category = Category.objects.create(
+        name=data['name'],
+        slug = data['slug']
+    )
+
+    serializer = CategorySerializer(category, many=False)
+    return Response(serializer.data)
+
+
+## Delete Category View
+@api_view(['DELETE'])
+def deleteCategory(request, pk):
+    category = Category.objects.get(id=pk)     #(_id=pk)
+    category.delete()
+    return Response('Category Deleted')
+
+
+
+
+
+
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
+#@permission_classes([IsAuthenticated])
+#@permission_classes([IsAdminUser])
+@permission_classes([IsSuperUser])
 def getCategories(request):   #pk
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)

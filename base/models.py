@@ -55,6 +55,7 @@ class Product(models.Model):
 
 class Product(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)  #seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='products', null=True)
+    #vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE, related_name='products', null=True)
     name = models.CharField(max_length=200, null=True, blank=True)
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE) #category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')    #models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, default='Default-Category')
     image = models.ImageField(null=True, blank=True, default='/placeholder.png')
@@ -88,7 +89,7 @@ class Review(models.Model):
     rating = models.IntegerField(null=True, blank=True, default=0)
     comment = models.TextField(null=True, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True)
-    #id = models.AutoField(primary_key=True, editable=False)
+    # id = models.AutoField(primary_key=True, editable=False)
 
     def __str__(self):
         return str(self.rating)
@@ -107,7 +108,20 @@ class Review(models.Model):
 #         return str(self.rating)
 
 
- 
+
+
+'''   11/4/2022   no need for Cart
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='carts')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='carts')
+    quantity = models.IntegerField(default=1)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    #id = models.AutoField(primary_key=True, editable=False)
+
+    def __str__(self):
+        return str(self.quantity)       
+'''   
+   
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     paymentMethod = models.CharField(max_length=200, null=True, blank=True)
@@ -159,3 +173,22 @@ class ShippingAddress(models.Model):
 
     def __str__(self):
         return str(self.address)
+
+
+
+
+'''     test for vendor  
+class Vendor(models.Model):
+    name = models.CharField(max_length=200, null=True, blank=True)
+    email = models.CharField(max_length=200, null=True, blank=True)
+    phone = models.CharField(max_length=200, null=True, blank=True)
+    address = models.CharField(max_length=200, null=True, blank=True)
+    city = models.CharField(max_length=200, null=True, blank=True)
+    postalCode = models.CharField(max_length=200, null=True, blank=True)
+    country = models.CharField(max_length=200, null=True, blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    #_id = models.AutoField(primary_key=True, editable=False)
+
+    def __str__(self):
+        return str(self.name)
+'''

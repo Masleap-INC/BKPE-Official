@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'base.apps.BaseConfig',
+    'vendor.apps.VendorConfig',
 
     # 3 rd party
     

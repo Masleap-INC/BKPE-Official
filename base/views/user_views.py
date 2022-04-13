@@ -91,6 +91,8 @@ def getUserById(request, pk):
 
 
 
+
+
 @api_view(['PUT'])
 # need to add later  @permission_classes([IsAuthenticated])
 def updateUser(request, pk):
@@ -122,9 +124,25 @@ def deleteUser(request, pk):
     return Response('User was deleted')
 
 
+#get superuser
+@api_view(['GET'])
+def getSuperUser(request):
+    user = User.objects.get(is_superuser=True)
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
 
 
-'''   test for vendor 
+# ## get all Vendors view
+# @api_view(['GET'])
+# def getAllVendors(request):
+#     vendors = User.objects.filter(is_staff=False)
+#     serializer = UserSerializer(vendors, many=True)
+#     return Response(serializer.data)
+
+''' 
+
+# test for vendor by id
+ 
 def getVendor(request):
     vendors = User.objects.filter(is_staff=True)
     serializer = UserSerializer(vendors, many=True)

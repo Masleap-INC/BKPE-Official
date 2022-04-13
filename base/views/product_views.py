@@ -139,11 +139,19 @@ def getTopProducts(request):
 
 
 
-## Get Product View
+## Get Product by Product id View
 @api_view(['GET'])
 def getProduct(request, pk):
     product = Product.objects.get(id=pk)     #(_id=pk)
     serializer = ProductSerializer(product, many=False)
+    return Response(serializer.data)
+
+
+## Get Product by Product Vendor id View
+@api_view(['GET'])
+def getProductByVendor(request, pk):
+    products = Product.objects.filter(vendor_id=pk)
+    serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
 
 
@@ -152,10 +160,12 @@ def getProduct(request, pk):
 @api_view(['POST'])
 # need to add later  @permission_classes([IsAdminUser])
 def createProduct(request):
-    user = request.user
+    #user = request.user
+    vendor = request.user
 
     product = Product.objects.create(
-        user=user,
+        #user=user,
+        vendor=vendor,
         name='Sample Name',
         price=0,
         brand='Sample Brand',
@@ -213,6 +223,7 @@ def uploadImage(request):
 
 ## Create Category View    #createCategory/ added on 06.04.2022
 @api_view(['POST'])
+@permission_classes([IsSuperUser])
 def createCategory(request):
     data = request.data
     category = Category.objects.create(
@@ -226,6 +237,7 @@ def createCategory(request):
 
 ## Delete Category View
 @api_view(['DELETE'])
+@permission_classes([IsSuperUser])
 def deleteCategory(request, pk):
     category = Category.objects.get(id=pk)     #(_id=pk)
     category.delete()
@@ -238,9 +250,6 @@ def deleteCategory(request, pk):
 
 
 @api_view(['GET'])
-#@permission_classes([IsAuthenticated])
-#@permission_classes([IsAdminUser])
-@permission_classes([IsSuperUser])
 def getCategories(request):   #pk
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
@@ -286,7 +295,8 @@ class CategoryDetail(APIView):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+#@permission_classes([IsAuthenticated])
+#@permission_classes([IsAdminUser])
 def createProductReview(request, pk):
     user = request.user
     product = Product.objects.get(id=pk)  #_id

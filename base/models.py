@@ -54,26 +54,26 @@ class Product(models.Model):
 
 
 class Product(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)  #seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='products', null=True)
-    #vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE, related_name='products', null=True)
+    ### user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)  
+    vendor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)  
     name = models.CharField(max_length=200, null=True, blank=True)
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE) #category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')    #models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, default='Default-Category')
     image = models.ImageField(null=True, blank=True, default='/placeholder.png')
     brand = models.CharField(max_length=200, null=True, blank=True)
 
-    #category = models.CharField(max_length=200, null=True, blank=True)   ##this category is the old one
+    #### category = models.CharField(max_length=200, null=True, blank=True)   ##this category is the old one
     
     description = models.TextField(null=True, blank=True)
     rating = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     numReviews = models.IntegerField(null=True, blank=True, default=0)
-    # price = models.IntegerField(null=True, blank=True, default=0)
+    ### price = models.IntegerField(null=True, blank=True, default=0)
 
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
 
     countInStock = models.IntegerField(null=True, blank=True, default=0)
     createdAt = models.DateTimeField(auto_now_add=True)
-    #id = models.AutoField(primary_key=True, editable=False) 
-    #objects = models.Manager()
+    ### id = models.AutoField(primary_key=True, editable=False) 
+    ### objects = models.Manager()
 
 
     def __str__(self):

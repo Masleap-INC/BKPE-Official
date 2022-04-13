@@ -23,9 +23,12 @@ urlpatterns = [
     path('<str:pk>/reviews/', views.createProductReview, name="create-review"),
     path('top/', views.getTopProducts, name='top-products'),
     path('<str:pk>/', views.getProduct, name='product'),  #<str:pk> #<int:pk> #<pk>
+    
+    path('productByVendorId/<str:pk>/', views.getProductByVendor, name='productByVendorId'), # Test for vendorId based Products
 
     path('update/<str:pk>/', views.updateProduct, name='product-update'),
     path('delete/<str:pk>/', views.deleteProduct, name='product-delete'),
+
 
 
 ]

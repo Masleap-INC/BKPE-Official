@@ -30,7 +30,6 @@ class IsSuperUser(IsAdminUser):
 
 
 
-
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def getProducts(request):
@@ -178,7 +177,7 @@ def createProduct(request):
     return Response(serializer.data)
 
 @api_view(['PUT'])
-# need to add later  @permission_classes([IsAdminUser])
+@permission_classes([IsAdminUser])
 def updateProduct(request, pk):
     data = request.data
     product = Product.objects.get(id=pk)

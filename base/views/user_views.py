@@ -124,20 +124,20 @@ def deleteUser(request, pk):
     return Response('User was deleted')
 
 
-#get superuser
-@api_view(['GET'])
-def getSuperUser(request):
-    user = User.objects.get(is_superuser=True)
-    serializer = UserSerializer(user, many=False)
-    return Response(serializer.data)
-
-
-# ## get all Vendors view
+# #get superuser
 # @api_view(['GET'])
-# def getAllVendors(request):
-#     vendors = User.objects.filter(is_staff=False)
-#     serializer = UserSerializer(vendors, many=True)
+# def getSuperUser(request):
+#     user = User.objects.get(is_superuser=True)
+#     serializer = UserSerializer(user, many=False)
 #     return Response(serializer.data)
+
+
+## get all Vendors view
+@api_view(['GET'])
+def getAllVendors(request):
+    vendors = User.objects.filter(is_staff=True)
+    serializer = UserSerializer(vendors, many=True)
+    return Response(serializer.data)
 
 ''' 
 

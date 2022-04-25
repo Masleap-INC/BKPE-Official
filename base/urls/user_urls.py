@@ -14,7 +14,7 @@ urlpatterns = [
     path('profile/', views.getUserProfile , name='users-profile'),
     path('', views.getUsers , name='users'),
 
-    # path('allVendors/', views.getAllVendors , name='allVendors'),# test for vendors
+    path('allVendors/', views.getAllVendors , name='allVendors'),# test for vendors
 
     path('<str:pk>/', views.getUserById, name='user'),
     path('update/<str:pk>/', views.updateUser, name='user-update'),

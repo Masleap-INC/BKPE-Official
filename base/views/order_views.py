@@ -23,7 +23,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from base.models import Product, Order, OrderItem, ShippingAddress
-from base.serializers import ProductSerializer, OrderSerializer
+from base.serializers import ProductSerializer, OrderSerializer,OrderItemSerializer
 
 from rest_framework import status
 from datetime import datetime
@@ -67,6 +67,7 @@ def addOrderItems(request):
 
             item = OrderItem.objects.create(
                 product=product,
+                vendor=product.vendor, #test vendor
                 order=order,
                 name=product.name,
                 qty=i['qty'],
@@ -140,6 +141,16 @@ def updateOrderToDelivered(request, pk):
 
     return Response('Order was delivered')
 
+
+
+
+@api_view(['GET'])
+# Get order items by vendor ID
+def getOrderItemsByVendorId(request, pk):
+    orderItems = OrderItem.objects.filter(product__vendor__id=pk)
+    #orderItems = Order.order_set.filter(product__vendor__id=pk)
+    serializer = OrderItemSerializer(orderItems, many=True)
+    return Response(serializer.data)
 
 
 

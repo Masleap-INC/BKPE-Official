@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'base.apps.BaseConfig',
+    'vendor.apps.VendorConfig',
 
     # 3 rd party
     
@@ -63,7 +64,7 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),  #(minutes=2),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=300),  #(minutes=2),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
@@ -130,7 +131,7 @@ WSGI_APPLICATION = 'bkpe.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-''' 
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -150,6 +151,9 @@ DATABASES = {
 }
 '''
 
+
+
+#mongoDB Atlas
 DATABASES = {
         'default': {
             'ENGINE': 'djongo',

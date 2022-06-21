@@ -11,8 +11,8 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from base.models import Product,Category, Review
-from base.serializers import ProductSerializer,CategorySerializer
+from base.models import Product,Category, Review ,SubCategory
+from base.serializers import ProductSerializer,CategorySerializer,SubCategorySerializer
 from rest_framework import status
 from django.http import Http404
 
@@ -126,13 +126,13 @@ def getProducts(request):
 
 '''
 
+
+
 @api_view(['GET'])
 def getTopProducts(request):
     products = Product.objects.filter(rating__gte=4).order_by('-rating')[0:5]
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
-
-
 
 
 
@@ -249,6 +249,7 @@ def deleteCategory(request, pk):
 
 
 @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
 def getCategories(request):   #pk
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
@@ -339,6 +340,141 @@ def createProductReview(request, pk):
         product.save()
 
         return Response('Review Added')
+
+
+##25.04.2022
+
+# Create Sub Category View
+@api_view(['POST'])
+@permission_classes([IsSuperUser])
+def createSubCategory(request):
+    data = request.data
+    subCategory = SubCategory.objects.create(
+        name=data['name'],
+        slug = data['slug'],
+        category = data['category']
+    )
+
+    serializer = SubCategorySerializer(subCategory, many=False)
+    return Response(serializer.data)
+
+#Sub Category View
+@api_view(['GET'])
+def getSubCategories(request):
+    subCategories = SubCategory.objects.all() 
+    serializer = SubCategorySerializer(subCategories, many=True)
+    return Response(serializer.data)
+
+# #Sub sub Category View
+# @api_view(['GET'])
+# def getSubSubCategories(request):
+#     subSubCategories = SubSubCategory.objects.all()
+#     serializer = SubSubCategorySerializer(subSubCategories, many=True)
+#     return Response(serializer.data)
+
+# #Sub sub sub Category View
+# @api_view(['GET'])
+# def getSubSubSubCategories(request):
+#     subSubSubCategories = SubSubSubCategory.objects.all()
+#     serializer = SubSubSubCategorySerializer(subSubSubCategories, many=True)
+#     return Response(serializer.data)
+
+
+
+
+# get products by year
+@api_view(['GET'])
+def getProductsByYear(request, year):
+    products = Product.objects.filter(year=year)
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+''' 
+# get products by year and category 
+@api_view(['GET'])
+def getProductsByYearAndCategory(request, year, category):
+    products = Product.objects.filter(year=year, category=category)
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+'''
+
+# get new products
+@api_view(['GET'])
+def getNewProducts(request):
+    products = Product.objects.filter(new=True)
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+
+# get products by type
+@api_view(['GET'])
+def getProductsByType(request, type):
+    products = Product.objects.filter(type=type)
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+# get products on sale
+@api_view(['GET'])
+def getProductsOnSale(request):
+    products = Product.objects.filter(onSale=True)
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+# get products by category and year and type
+@api_view(['GET'])
+def getProductsByCategoryAndYearAndType(request, category, year, type):
+    products = Product.objects.filter(category=category, year=year, type=type)
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+ 
+
+# get products by category
+@api_view(['GET'])
+def getProductsByCategory(request, category):
+    products = Product.objects.filter(category=category)
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         

@@ -116,4 +116,22 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 
+## 26.04.2022
 
+# Sub category serializer
+class SubCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubCategory
+        fields = '__all__'
+
+# # Sub Sub category serializer
+# class SubSubCategorySerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = SubSubCategory
+#         fields = '__all__'
+
+# # Sub Sub Sub category serializer
+# class SubSubSubCategorySerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = SubSubSubCategory
+#         fields = '__all__'

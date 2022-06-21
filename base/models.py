@@ -1,4 +1,5 @@
 from operator import truediv
+from unicodedata import category
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -21,56 +22,45 @@ class Category(models.Model):
         return f'/{self.slug}/'
 
 
-'''  21.04.2022
-## Subcategory models
-class Subcategory(models.Model):
-    name = models.CharField(max_length=255)
-    slug = models.SlugField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
-    class Meta:
-        ordering = ('name',)
+
+# # Sub Category models
+# class SubCategory(models.Model):
+#     name = models.CharField(max_length=255)
+#     slug = models.SlugField()
+#     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+#     class Meta:
+#         ordering = ('name',)
     
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
     
-    def get_absolute_url(self):
-        return f'/{self.category.slug}/{self.slug}/'
+#     def get_absolute_url(self):
+#         return f'/{self.slug}/'
 
 
-# Sub subcategory models
-class Subsubcategory(models.Model):
-    name = models.CharField(max_length=255)
-    slug = models.SlugField()
-    subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE)
+## Sub category models
+# class SubCategory(models.Model):
+#     name = models.CharField(max_length=255)
+#     slug = models.SlugField()
+#     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
-    class Meta:
-        ordering = ('name',)
+#     class Meta:
+#         ordering = ('name',)
     
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
     
-    def get_absolute_url(self):
-        return f'/{self.subcategory.category.slug}/{self.subcategory.slug}/{self.slug}/'
+#     def get_absolute_url(self):
+#         return f'/{self.category.slug}/{self.slug}/'
 
 
-# Sub sub subcategory models
-class Subsubsubcategory(models.Model):
-    name = models.CharField(max_length=255)
-    slug = models.SlugField()
-    subsubcategory = models.ForeignKey(Subsubcategory, on_delete=models.CASCADE)
-
-    class Meta:
-        ordering = ('name',)
-    
-    def __str__(self):
-        return self.name
-    
-    def get_absolute_url(self):
-        return f'/{self.subsubcategory.subcategory.category.slug}/{self.subsubcategory.subcategory.slug}/{self.subsubcategory.slug}/{self.slug}/'
-        
 
 
+       
+
+'''  
 ## Product models
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -94,9 +84,9 @@ class Product(models.Model):
     
     def get_absolute_url(self):
         return f'/{self.category.slug}/{self.subcategory.slug}/{self.slug}/'
+
+
 '''
-
-
 
 
 
@@ -107,16 +97,24 @@ class Product(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE) #category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')    #models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, default='Default-Category')
     image = models.ImageField(null=True, blank=True, default='/placeholder.png')
+    price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     brand = models.CharField(max_length=200, null=True, blank=True)
 
-    #### category = models.CharField(max_length=200, null=True, blank=True)   ##this category is the old one
-    
+    # subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
     description = models.TextField(null=True, blank=True)
+
+
+    year = models.IntegerField(null=True, blank=True)
+    new = models.BooleanField(default=False) 
+    type = models.CharField(max_length=200, null=True, blank=True) 
+    onSale = models.BooleanField(default=False) 
+    salePrice = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
+
+
     rating = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     numReviews = models.IntegerField(null=True, blank=True, default=0)
     ### price = models.IntegerField(null=True, blank=True, default=0)
 
-    price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
 
     countInStock = models.IntegerField(null=True, blank=True, default=0)
     createdAt = models.DateTimeField(auto_now_add=True)

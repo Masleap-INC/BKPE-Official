@@ -1,6 +1,6 @@
 from curses.ascii import SUB
 from django.contrib import admin
-from base.models import Product, Order, OrderItem, Category,ShippingAddress,Review, SubCategory, User
+from base.models import Product, Order, OrderItem, Category,ShippingAddress,Review, User
 
 # Register your models here.
 
@@ -8,7 +8,7 @@ from base.models import Product, Order, OrderItem, Category,ShippingAddress,Revi
 admin.site.register(Product)
 admin.site.register(Category)
 
-admin.site.register(SubCategory)
+#admin.site.register(SubCategory)
 # admin.site.register(SubSubCategory)
 # admin.site.register(SubSubSubCategory)
 

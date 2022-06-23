@@ -438,6 +438,12 @@ def getProductsByCategory(request, category):
 
 
 
+#  get products by category-slug and year and type
+# @api_view(['GET'])
+# def getProductsByCategorySlugAndYearAndType(request, categorySlug, year, type):
+#     products = Product.objects.filter(category=category, year=year, type=type)
+#     serializer = ProductSerializer(products, many=True)
+#     return Response(serializer.data)
 
 
 

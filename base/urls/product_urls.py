@@ -34,9 +34,9 @@ urlpatterns = [
 
 
     path('year/<int:year>/', views.getProductsByYear, name='products-by-year'),
-    path('newProducts/', views.getNewProducts, name='new-products'),
+    path('ProdStatus/newProducts/', views.getNewProducts, name='new-products'),
     path('type/<str:type>/', views.getProductsByType, name='products-by-type'),
-    path('onsale/', views.getProductsOnSale, name='on-sale-products'),
+    path('saleStatus/onsale/', views.getProductsOnSale, name='on-sale-products'),
     path('productByCategory&Year&Type/<str:category>/<int:year>/<str:type>/', views.getProductsByCategoryAndYearAndType, name='products-by-category-and-year-and-type'),
 
 

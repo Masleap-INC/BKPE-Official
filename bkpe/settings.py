@@ -154,6 +154,7 @@ DATABASES = {
 
 
 #mongoDB Atlas
+''' 
 DATABASES = {
         'default': {
             'ENGINE': 'djongo',
@@ -164,6 +165,19 @@ DATABASES = {
             }
         }
 }
+'''
+
+DATABASES = {
+        'default': {
+            'ENGINE': 'djongo',
+            'NAME': 'bkpeDB',
+            'ENFORCE_SCHEMA': False,
+            'CLIENT': {
+                'host': 'mongodb+srv://bkpeDB323:bkpeDB323@cluster0.mvhzrww.mongodb.net/?retryWrites=true&w=majority'
+            }
+        }
+}
+
 
 
 

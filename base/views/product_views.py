@@ -18,6 +18,7 @@ from django.http import Http404
 
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
+from django.db.models import Q
 
 
 
@@ -402,7 +403,7 @@ def getProductsByYearAndCategory(request, year, category):
 # get new products
 @api_view(['GET'])
 def getNewProducts(request):
-    products = Product.objects.filter(new=True)
+    products = Product.objects.filter(new__in = [True])     #products = Product.objects.filter(new=True)  :- this query works fine for sqlLite not for mongoDB
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
 
@@ -417,14 +418,15 @@ def getProductsByType(request, type):
 # get products on sale
 @api_view(['GET'])
 def getProductsOnSale(request):
-    products = Product.objects.filter(onSale=True)
+    products = Product.objects.filter(onSale__in = [True])    #products = Product.objects.filter(onSale=True)  :- this query works fine for sqlLite not for mongoDB
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
 
 # get products by category and year and type
 @api_view(['GET'])
 def getProductsByCategoryAndYearAndType(request, category, year, type):
-    products = Product.objects.filter(category=category, year=year, type=type)
+    products = Product.objects.filter(category=category, year=year, type=type)  #products = Product.objects.filter(Q(category=category) & Q(year=year) & Q(type=type))  this runs well also.
+    
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
  

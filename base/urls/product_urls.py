@@ -56,6 +56,6 @@ urlpatterns = [
 
 # http://127.0.0.1:8000/api/products/type/Body/  #this is working perfectly for the products search with keyword.
 #  http://127.0.0.1:8000/api/products/year/2022/  #this is working perfectly for the products search with year.
-# http://127.0.0.1:8000/api/products/productByCategory&Year&Type/10/2022/Door/ #this is working perfectly for the products search with category, year and type.
-# http://127.0.0.1:8000/api/products/onsale/  
-# http://127.0.0.1:8000/api/products/newProducts/
+# http://127.0.0.1:8000/api/products/productByCategory&Year&Type/1/1967/RESTORATION/ #this is working perfectly for the products search with category, year and type.
+# http://127.0.0.1:8000/api/products/saleStatus/onsale/ 
+# http://127.0.0.1:8000/api/products/ProdStatus/newProducts/
